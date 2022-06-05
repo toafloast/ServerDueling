@@ -3,7 +3,7 @@
 When uploading your plugin to github/gitlab
 start your repo name with "omegga-"
 
-example: https://github.com/crazey & Datiel/omegga-ServerDueling
+example: https://github.com/toafloast/omegga-ServerDueling
 
 Your plugin will be installed via omegga install gh:crazey & Datiel/ServerDueling
 
@@ -20,7 +20,7 @@ remove it entirely if it is unnecessary.
 
 ## Install
 
-`omegga install gh:crazey & Datiel/ServerDueling`
+`https://github.com/toafloast/omegga-ServerDueling`
 
 _TODO: more steps...?_
 
