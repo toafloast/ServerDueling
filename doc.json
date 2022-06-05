@@ -1,0 +1,159 @@
+{
+  "name": "Dueling",
+  "description": "A recreation of the Server_Dueling gamemode.",
+  "author": "crazey",
+  "config": {    
+    "Duel-Blacklist": {
+      "description": "Ban certain players from dueling.",
+      "type": "players",
+      "default": [
+        {
+        }
+      ]
+    },
+    "First-To-X": {
+      "description": "First to X points wins the duel.",
+      "default": 5,
+      "type": "number"
+    },  
+    "Points-On-Tie": {
+      "description": "Give this many points to both players if a tie occurs.",
+      "default": 0.5,
+      "type": "number"
+    },
+    "Points-On-Timeout": {
+      "description": "How many points does the player with higher round score get on time-out?",
+      "default": 1,
+      "type": "number"
+    },
+    "Points-On-Kill": {
+      "description": "How many points does the killer get?",
+      "default": 1,
+      "type": "number"
+    },
+    "Announce-Winner": {
+      "description": "Announces duel results in chat",
+      "default": true,
+      "type": "boolean"
+    },
+    "Stage-Horizontal-Offset": {
+      "description": "The horizontal offset of stages. Make sure it isn't too low, else stages will intersect eachother, or too high, to not cause floating point errors.",
+      "default": 12000,
+      "type": "number"
+    },
+    "Stage-Vertical-Offset": {
+      "description": "The vertical offset. Make sure it isn't too low, to not intersect builds, or too high, to not cause floating point errors.",
+      "default": 20000,
+      "type": "number"
+    },
+    "Stage-Loop":{
+      "description": "Stages are loaded in sequence, and they need to loop after a certain amount, as to not go off into infinity. Reccomended amount : Half of playercount.",
+      "default": 15,
+      "type": "number"
+    },
+    "Intermission-Minigame": {
+      "description": "After a duel, send the players to this minigame. Type in GLOBAL if you don't want them to be sent to a minigame.",
+      "default": "GLOBAL",
+      "type": "string"
+    },
+    "Rating-Power": {
+      "description": "Stage weighting rate power. Higher number increases likelihood of high-voted stages. Set to 0 for all stages to be equally likely.",
+      "default": 3,
+      "type": "number"
+    },
+    "Role-Can-Save-Stages": {
+      "description": "Which role can save custom stages to be added to the map pool?",
+      "type": "role",
+      "default": "Admin"
+    }
+  },
+  "commands": [
+    {
+      "name": "/duel",
+      "description": "Send someone a duel request to fight them.",
+      "example": "/bet crazey pistol easter_island",
+      "args": [{
+        "name": "target",
+        "description": "Who are you dueling?",
+        "required": true
+      },
+      {
+        "name": "weapon",
+        "description": "What weapon? * for wildcard",
+        "required": false
+      },
+      {
+        "name": "target",
+        "description": "What stage?",
+        "required": false
+      }]
+    },
+    {
+      "name": "/listweapons",
+      "description": "Displays all weapons.",
+      "example": "/listweapons",
+      "args": []
+    },
+    {
+      "name": "/liststages",
+      "description": "List some of the available stages.",
+      "example": "/liststages 2",
+      "args": [{
+        "name": "page",
+        "description": "",
+        "required": false
+      }]
+    },
+    {
+      "name": "/weaponsearch",
+      "description": "Search weapons on a given stage, or see stages available weapons.",
+      "example": "/weaponsearch bow",
+      "args": [{
+        "name": "weapon",
+        "description": "Filter for which weapon?",
+        "required": true
+      }]
+    },
+    {
+      "name": "/ratestage",
+      "description": "Give your opionion on a stage with a 1-5 rating.",
+      "example": "/ratestage Candystreet 5",
+      "args": [{
+        "name": "stage",
+        "description": "Who are you dueling?",
+        "required": true
+      },
+      {
+        "name": "value",
+        "description": "What rating do you give it?",
+        "required": true
+      }]
+    },
+    {
+      "name": "/topstages",
+      "description": "Lists the top stages sorted by rating.",
+      "example": "/topstages",
+      "args": []
+    },
+    {
+      "name": "/savestage",
+      "description": "Saves the stage in your selection region (requires Ctrl + C)",
+      "example": "/savestage The_Unoriginal",
+      "args": [{
+        "name": "stagename",
+        "description": "Name of the stage you are saving.",
+        "required": true
+      }]
+    },
+    {
+      "name": "/stageinfo",
+      "description": "More info about a stage : creation date, exact rating, weapons...",
+      "example": "/stageinfo The_Unoriginal",
+      "args": [{
+        "name": "stage",
+        "description": "Which stage do you want to know more about?",
+        "required": true
+      }]
+    }
+  ]
+}
