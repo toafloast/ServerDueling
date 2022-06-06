@@ -330,18 +330,6 @@ export default class DuelingPlugin{
 				Requests.remove(Requests.ongoing.find(a => a.reciever === player.name || a.sender === player.name),"disconnect");
 			}
 		})
-		.on('cmd:testwa', async(name) =>{
-			var chosen = [];
-			for(var i = 0; i < 10000; i+=1){
-				var pick = Requests.pickstageWeighted(DuelHandler.StagePool);
-				chosen.push(pick.name);
-			}
-			var counter = {};
-			chosen.forEach(a => {counter[a] = (counter[a] || 0) + 1;});
-			Omegga.broadcast("STAGE BIAS TEST RESULT");
-			this.omegga.broadcast(JSON.stringify(counter));
-			this.omegga.broadcast(this.config["Rating-Power"]);
-		})
 		.on('cmd:duel', async (name, target, weapon, stage) => {
 			if(this.config["Duel-Blacklist"].find(a => a.id ===this.omegga.findPlayerByName(name).id)){
 				this.omegga.whisper(name, `<color="ff3333">You have been blacklisted from dueling.</>`);

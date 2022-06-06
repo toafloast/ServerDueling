@@ -1,6 +1,43 @@
 import OmeggaPlugin, { OL, PS, PC } from '../omegga';
 import fs from 'fs';
 
+function fuzzyCheck(check:string, search:string[]){
+    //Return the string closest to the strings we are checking. If none, return false.
+    var scores :Object= {};
+    //First just check exact-match.
+    if(search.find(a=>a===check)){
+      return search.find(a=>a===check);
+    }
+    for(var a in search){
+      for(var b = 0; b < search[a].length; b++){
+        //First, match characters. Case-dependant.
+        scores[search[a]] = (scores[search[a]] || 0) + (search[a][b] === check[b] ? 4 : (search[a][b]).toLowerCase() === (check[b] || "").toLowerCase() ? 2 : 0);
+        //Second, subtract points of characters based on distance.
+        if(check.indexOf(check[b],b) >= 0){
+          scores[search[a]] = (scores[search[a]] || 0) - Math.min(Math.abs(check.indexOf(check[b], b) - search[a].indexOf(search[a][b], b)),3) + 1;
+        }
+      }
+    }
+    //Finally, sort and return the greater value.
+    if(scores){
+      //Now we have a bunch of keys. {"a":0, "b":6, "c":-2}.
+      //Put all of them into an array, then sort that array.
+      var arrayified : any = [];
+      Object.entries(scores).forEach(e => arrayified.push([e[0], e[1]]));
+      arrayified.sort((a, z) => z[1] - a[1]);
+      //Return the matching string.
+      if(arrayified[0][1] > arrayified[0][0].length*0.25){
+        return arrayified[0][0];
+      }
+      else{
+        return false;
+      }
+    }
+    //Couldn't find a match. Return false.
+    return false;
+  }
+
+
 class DuelRequest{
 	sender : string;
 	reciever : string;
@@ -152,7 +189,8 @@ export class Requests{
 			"glowstick":"charged_longsword",
 			"holo":"holo_blade",
 			"service":"service_rifle",
-			"sr":"service_rifle"
+			"sr":"service_rifle",
+			"grenade":"impact_grenade"
 		}
 		if(DuelHandler.StagePool.length < 1){
 			Omegga.whisper(name, `<color="ff3333">No stages found! Ask the host to <code>/savestage</> some stages.</>`);
@@ -181,6 +219,10 @@ export class Requests{
 			weapon = "";
 		}
 		if(weapon){
+			var weaponchoices :string[]= [];
+			Object.keys(DuelHandler.gun_names).forEach(a => weaponchoices.push(a));
+			Object.keys(aliases).forEach(a => weaponchoices.push(a));
+			weapon = fuzzyCheck(weapon || "", weaponchoices);
 			if(aliases[weapon.toLowerCase()]){
 				weapon = aliases[weapon.toLowerCase()];
 			}
@@ -191,6 +233,9 @@ export class Requests{
 			}
 		}
 		if(stage){
+			var stagechoices : string[] = [];
+			DuelHandler.StagePool.forEach(a => stagechoices.push(a.name));
+			stage = fuzzyCheck(stage || "", stagechoices);
 			if(!DuelHandler.StagePool.find(a => a.name.toLowerCase() === stage.toLowerCase())){
 				//Couldn't find the stage, but it was specified. Exit out.
 				Omegga.whisper(name, `<color="ff3333">Invalid stage. Type <code>/liststages</> for a list of stages.</>`);
@@ -620,6 +665,14 @@ export class DuelHandler{
 	static async EndDuel(battle:Battle){
 		//index 0 : level stuff
 		//index 1 : minigame stuff
+		var data = await this.store.get(battle.request.stage);
+		console.log(data);
+		if(!data.ratings[`'${battle.fighterAttacking.Player.id}'`]){
+			this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ffff33">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+		}
+		if(!data.ratings[`'${battle.fighterAttacking.Player.id}'`]){
+			this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ffff33">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+		}
 		if(battle){
 			//clear the level
 			var clearX = battle.stagepos.stagebounds.maxBound[0]-battle.stagepos.stagebounds.minBound[0];
