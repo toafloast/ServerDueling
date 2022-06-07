@@ -218,6 +218,9 @@ export class Requests{
 		if(weapon === "*"){
 			weapon = "";
 		}
+		if(stage === "*"){
+			stage = "";
+		}
 		if(weapon){
 			var weaponchoices :string[]= [];
 			Object.keys(DuelHandler.gun_names).forEach(a => weaponchoices.push(a));
@@ -666,13 +669,34 @@ export class DuelHandler{
 		//index 0 : level stuff
 		//index 1 : minigame stuff
 		var data = await this.store.get(battle.request.stage);
-		console.log(data);
-		if(!data.ratings[`'${battle.fighterAttacking.Player.id}'`]){
-			this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ffff33">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+		if(data){
+			if(!data.ratings[`'${battle.fighterAttacking.Player.id}'`]){
+				if(battle.fighterAttacking.Player.name){
+				this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ff0000">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+				this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ff0000">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+				this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ff0000">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+				}
+			}
+			if(!data.ratings[`'${battle.fighterDefending.Player.id}'`]){
+				if(battle.fighterDefending.Player.name){
+				this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ff0000">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+				this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ff0000">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+				this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ff0000">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
+				}
+			}
 		}
-		if(!data.ratings[`'${battle.fighterAttacking.Player.id}'`]){
-			this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ffff33">You haven't rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to rate it!</>`);
-		}
+		else{
+			if(battle.fighterAttacking.Player.name){
+				this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ff0000">No one has rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to be the first!</>`);
+				this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ff0000">No one has rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to be the first!</>`);
+				this.omegga.whisper(battle.fighterAttacking.Player.name, `<color="ff0000">No one has rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to be the first!</>`);
+			}
+			if(battle.fighterDefending.Player.name){
+				this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ff0000">No one has rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to be the first!</>`);
+				this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ff0000">No one has rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to be the first!</>`);
+				this.omegga.whisper(battle.fighterDefending.Player.name, `<color="ff0000">No one has rated ${battle.request.stage} yet! Type <code>/ratestage ${battle.request.stage} (rating)</> to be the first!</>`);
+
+			}}
 		if(battle){
 			//clear the level
 			var clearX = battle.stagepos.stagebounds.maxBound[0]-battle.stagepos.stagebounds.minBound[0];
