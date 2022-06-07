@@ -173,7 +173,7 @@ export class Requests{
 	}
 
 	//painful
-	static async sendRequest(name, target, weapon, stage, isOpen){
+	static async sendRequest(name, target, weapon : string, stage : string, isOpen){
 		var aliases = {
 			"1911": "high_power_pistol",
 			"hpp":"high_power_pistol",
@@ -226,6 +226,10 @@ export class Requests{
 			Object.keys(DuelHandler.gun_names).forEach(a => weaponchoices.push(a));
 			Object.keys(aliases).forEach(a => weaponchoices.push(a));
 			weapon = fuzzyCheck(weapon || "", weaponchoices);
+			if(!weapon){
+				Omegga.whisper(name, `<color="ff3333">Couldn't find the desired weapon.</>`);
+				return
+			}
 			if(aliases[weapon.toLowerCase()]){
 				weapon = aliases[weapon.toLowerCase()];
 			}
@@ -239,6 +243,10 @@ export class Requests{
 			var stagechoices : string[] = [];
 			DuelHandler.StagePool.forEach(a => stagechoices.push(a.name));
 			stage = fuzzyCheck(stage || "", stagechoices);
+			if(!stage){
+				Omegga.whisper(name, `<color="ff3333">Couldn't find the desired stage.</>`);
+				return
+			}
 			if(!DuelHandler.StagePool.find(a => a.name.toLowerCase() === stage.toLowerCase())){
 				//Couldn't find the stage, but it was specified. Exit out.
 				Omegga.whisper(name, `<color="ff3333">Invalid stage. Type <code>/liststages</> for a list of stages.</>`);

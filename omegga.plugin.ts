@@ -330,7 +330,7 @@ export default class DuelingPlugin{
 				Requests.remove(Requests.ongoing.find(a => a.reciever === player.name || a.sender === player.name),"disconnect");
 			}
 		})
-		.on('cmd:duel', async (name, target, weapon, stage) => {
+		.on('cmd:duel', async (name, target, weapon : string, stage : string) => {
 			if(this.config["Duel-Blacklist"].find(a => a.id ===this.omegga.findPlayerByName(name).id)){
 				this.omegga.whisper(name, `<color="ff3333">You have been blacklisted from dueling.</>`);
 				return;
